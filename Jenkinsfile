@@ -5,7 +5,7 @@ pipeline{
             steps {
                 script 
                 {
-                   git credentialsId: 'git-credentials', url: 'https://github.com/venu9999/my-app.git'
+                   git credentialsId: 'git-credentials', url: 'https://github.com/venu9999/eb-docker.git'
                 }
            }
         }
