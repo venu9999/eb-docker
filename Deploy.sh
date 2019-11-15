@@ -6,8 +6,7 @@ curl -LSso Dockerrun.aws.json.template https://raw.githubusercontent.com/imperfe
 # Set vars that typically do not vary by app
 BRANCH=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
 SHA1=$(git rev-parse HEAD)
-VERSION=$BRANCH-$SHA1
-#VERSION=$BRANCH-$SHA1-(date +%s)
+VERSION=$BRANCH-$SHA1-(date +%s)
 DESCRIPTION=$(git log -1 --pretty=%B)
 DESCRIPTION=${DESCRIPTION:0:180} # truncate to 180 chars - max beanstalk version description is 200
 ZIP=$VERSION.zip
@@ -29,9 +28,9 @@ eval $(aws ecr get-login --region $AWS_REGION | sed "s/-e none //")
 
 # Build and push the image
 docker build -t $NAME:$VERSION .
-docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION_${BUILD_ID}
-docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION_${BUILD_ID}
-docker rmi  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION_${BUILD_ID}
+docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION
+docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION
+docker rmi  $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$NAME:$VERSION
 # Copy template Dockerrun.aws.json and replace template vars
 cp Dockerrun.aws.json.template Dockerrun.aws.json
 
